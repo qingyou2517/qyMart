@@ -23,7 +23,7 @@
 					<scroll-view scroll-y class="sContent">
 						<view class="productView" v-for="item in 5">
 							<!-- 吸顶组件：内部只能有一个根元素 -->
-							<u-sticky custom-nav-height="0" zIndex="2">
+							<u-sticky customNavHeight="0" zIndex="2">
 								<view class="proTitle">产品名称{{item}}</view>
 							</u-sticky>
 							<view class="proContent">
