@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "pro-num-box": "/components/pro-num-box/pro-num-box"
+  }
+}
