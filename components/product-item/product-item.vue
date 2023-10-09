@@ -11,36 +11,9 @@
 			</view>
 			<view class="discount">3折</view>
 			<view class="numbox">
-				<view class="skuSelect" v-if="true">选规格</view>
+				<view class="skuSelect" v-if="false">选规格</view>
 				<view class="uNum" v-else>
-					<u-number-box v-model="value" min="0" max="99" @change="numChange">
-						<view
-							slot="minus"
-							class="minus numbtn"
-							:class="value<=0?'none':''"
-						>
-							<u-icon
-								name="minus"	
-								size="12"
-								color="#ccc"
-							></u-icon>
-						</view>
-						<text
-							slot="input"					           
-							class="input"
-							:class="value<=0?'none':''"
-						>{{value}}</text>
-						<view
-							slot="plus"
-							class="plus numbtn"
-						>
-							<u-icon
-								name="plus"
-								color="#FFFFFF"
-								size="12"
-							></u-icon>
-						</view>
-					</u-number-box>
+					<pro-num-box></pro-num-box>
 				</view>
 			</view>
 		</view>
@@ -52,13 +25,11 @@
 		name:"product-item",
 		data() {
 			return {
-				value: 0,
+				
 			};
 		},
 		methods:{
-			numChange(e){
-				console.log(e);
-			}
+			
 		}
 	}
 </script>
@@ -120,28 +91,6 @@
 					background: $brand-theme-color;
 					font-size: 28rpx;
 					color:#fff;
-				}
-				
-				.numbtn{
-					width: 40rpx;
-					height: 40rpx;
-					@include flex-box-set();
-				}
-				.minus{
-					border:1px solid #ccc;
-				}
-				.plus{
-					background: $brand-theme-color;
-				}
-				.input{
-					width: 60rpx;
-					height: 40rpx;
-					font-size: 26rpx;
-					color:#888;
-					@include flex-box-set();
-				}
-				.none{
-					display: none;
 				}
 			}
 		}

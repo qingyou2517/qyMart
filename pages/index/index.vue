@@ -38,7 +38,8 @@
 				</view>
 			</view>
 		</view>
-		<view style="height: 100rpx; background: green;"></view>
+		
+		<car-layout></car-layout>
 	</view>
 </template>
 
