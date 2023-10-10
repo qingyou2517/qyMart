@@ -4,10 +4,10 @@
 		<view class="wrapper">
 			<view class="infoModel">
 				<view class="left">免费配送</view>
-				<view class="right">
+				<navigator url="/pages/order/order" class="right">
 					<u-icon name="order" color="#576b95" size="24"></u-icon>
 					我的订单
-				</view>
+				</navigator>
 			</view>
 			<view class="scrollLayout">
 				<view class="leftScroll">
