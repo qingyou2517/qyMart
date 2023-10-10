@@ -1,6 +1,6 @@
 <template>
 	<view class="home">
-		<custom-head-bar></custom-head-bar>
+		<custom-head-bar id="customHeadBar" :foldState="foldState"></custom-head-bar>
 		<view class="wrapper">
 			<view class="infoModel">
 				<view class="left">免费配送</view>
@@ -38,7 +38,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 		<car-layout></car-layout>
 	</view>
 </template>
@@ -51,7 +51,8 @@
 				leftScrollValue: 0,
 				rightScrollValue: 0,
 				leftHitArr: [],
-				rightHitArr: []
+				rightHitArr: [],
+				foldState: false,
 			}
 		},
 		onLoad() {
@@ -76,23 +77,32 @@
 			// 获取滚动条内容高度
 			getHeightArr() {
 				let selectorQuery = uni.createSelectorQuery();
+				// 获取自定义头部的总高度
+				let customHeadBar
+				selectorQuery.select('#customHeadBar').boundingClientRect((rect) => {
+					customHeadBar = rect.height
+				})
 				// 左侧滚到区域的节点组
 				selectorQuery.selectAll(".navitem").boundingClientRect(rects => {
-					this.leftHitArr = rects.map(item => item.top - 150)
+					this.leftHitArr = rects.map(item => item.top - customHeadBar - 40)
 				}).exec()
+
 				// 右侧滚到区域的节点组
 				selectorQuery.selectAll(".productView").boundingClientRect(rects => {
-					this.rightHitArr = rects.map(item => item.top - 150)
+					this.rightHitArr = rects.map(item => item.top - customHeadBar - 40)
 				}).exec()
 			},
 			// 监听右侧滚动条的改变
 			rightScrollEnt(e) {
-				let scrolltop = e.detail.scrollTop
+				let scrolltop = Math.ceil(e.detail.scrollTop)
 				let idx = this.rightHitArr.findIndex((value, index, arr) => {
 					return scrolltop >= value && scrolltop < arr[index + 1]
 				})
 				this.navIdx = idx
 				this.leftScrollValue = this.leftHitArr[idx];
+
+				if (scrolltop <= 300) this.foldState = false
+				if (scrolltop >= 400) this.foldState = true
 			}
 		}
 	}

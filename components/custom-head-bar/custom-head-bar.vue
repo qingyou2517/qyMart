@@ -6,7 +6,7 @@
 
 		<view class="container">
 			<view class="statusBar" :style="{height: statusBarHeight + 'px'}"></view>
-			<view class="service" :style="{height: titleBarHeight + 'px'}">
+			<view class="service" :style="{height: titleBarHeight + 'px'}" v-if="!foldState">
 				<view class="kefu">
 					<u-icon name="server-fill" size="22" color="#fff"></u-icon>
 				</view>
@@ -15,7 +15,7 @@
 					后台管理
 				</navigator>
 			</view>
-			<view class="body">
+			<view class="body" :class="foldState?'fold':''" :style="{height:bodyBarHeight + 'px'}">
 				<view class="brand">
 					<view class="pic">
 						<image class="img" src="../../static/images/pinkpic.jpg" mode="aspectFill"></image>
@@ -23,7 +23,7 @@
 					<view class="text">
 						<view class="title">
 							<text class="font">青游商铺</text>
-							<u-icon name="more-circle" size="22" color="#fff"></u-icon>
+							<u-icon class="icon" name="more-circle" size="22" color="#fff"></u-icon>
 						</view>
 						<view class="des">一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍</view>
 					</view>
@@ -48,9 +48,20 @@
 				titleBarHeight: 0,
 			};
 		},
+		props: {
+			foldState: {
+				type: Boolean,
+				defaultValue: false
+			}
+		},
 		computed: {
 			totalHeight() {
+				if (this.foldState) return this.statusBarHeight + this.titleBarHeight + 10
 				return this.statusBarHeight + this.titleBarHeight + 100 + 10
+			},
+			bodyBarHeight() {
+				if (this.foldState) return this.titleBarHeight
+				return 100
 			}
 		},
 		mounted() {
@@ -116,6 +127,7 @@
 				padding: 0 45rpx;
 				height: 100px;
 				// border: 1px solid yellow;
+				transition: 0.3s;
 
 				.brand {
 					width: 580rpx;
@@ -126,6 +138,7 @@
 						height: 110rpx;
 						border-radius: 50%;
 						overflow: hidden;
+						transition: 0.3s;
 
 						.img {
 							width: 100%;
@@ -156,6 +169,38 @@
 							padding-top: 5rpx;
 							@include ellipsis()
 						}
+					}
+				}
+
+				&.fold {
+					padding: 0 30rpx;
+
+					.brand {
+						.pic {
+							width: 60rpx;
+							height: 60rpx;
+						}
+
+						.text {
+							padding-left: 15rpx;
+
+							.title {
+								font-size: 28rpx;
+
+								.icon {
+									transform: scale(0.9);
+								}
+							}
+
+							.des {
+								display: none;
+							}
+						}
+
+					}
+
+					.code {
+						display: none;
 					}
 				}
 
