@@ -1,19 +1,19 @@
 <template>
 	<view class="pro-item">
 		<view class="pic">
-			<image class="img" src="../../static/images/pinkpic.jpg" mode="aspectFill"></image>
+			<image class="img" :src="item.thumb" mode="aspectFill"></image>
 		</view>
 		<view class="text">
-			<view class="title">产品标题产品标题产品标题产品标题</view>
+			<view class="title">{{item.name}}</view>
 			<view class="price">
-				<view class="big">￥10.5</view>
-				<view class="small">￥22.3</view>
+				<view class="big">{{item.price}}</view>
+				<view class="small">{{item.before_price}}</view>
 			</view>
 			<view class="discount">3折</view>
 			<view class="numbox">
 				<view class="skuSelect" v-if="false">选规格</view>
 				<view class="uNum" v-else>
-					<pro-num-box></pro-num-box>
+					<pro-num-box :item="item"></pro-num-box>
 				</view>
 			</view>
 		</view>
@@ -22,78 +22,96 @@
 
 <script>
 	export default {
-		name:"product-item",
+		name: "product-item",
 		data() {
 			return {
-				
+
 			};
 		},
-		methods:{
-			
+		props: {
+			item: {
+				type: Object,
+				defaultValue() {
+					return {}
+				}
+			}
+		},
+		methods: {
+
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	.pro-item{
+	.pro-item {
 		width: 100%;
 		padding: 25rpx 0;
 		@include flex-box();
-		.pic{
+
+		.pic {
 			width: 180rpx;
 			height: 180rpx;
 			border-radius: 20rpx;
 			overflow: hidden;
-			.img{
+
+			.img {
 				width: 100%;
 				height: 100%;
 			}
 		}
-		.text{
-			flex:1;
-			padding-left:20rpx;
+
+		.text {
+			flex: 1;
+			padding-left: 20rpx;
 			position: relative;
-			.title{
+
+			.title {
 				font-size: 34rpx;
 				font-weight: bold;
-				@include ellipsis();			
+				@include ellipsis();
 			}
-			.price{
-				@include flex-box-set(start,end);
+
+			.price {
+				@include flex-box-set(start, end);
 				font-weight: bold;
-				padding:25rpx 0;
-				.big{
+				padding: 25rpx 0;
+
+				.big {
 					font-size: 34rpx;
-					color:$brand-theme-color;
+					color: $brand-theme-color;
 				}
-				.small{
+
+				.small {
 					font-size: 26rpx;
 					opacity: 0.4;
 					text-decoration: line-through;
-					padding-left:10rpx;
+					padding-left: 10rpx;
 				}
 			}
-			.discount{
+
+			.discount {
 				font-size: 22rpx;
-				color:$brand-theme-color;
-				padding:3rpx 8rpx;
-				border:1rpx solid $brand-theme-color;
+				color: $brand-theme-color;
+				padding: 3rpx 8rpx;
+				border: 1rpx solid $brand-theme-color;
 				display: inline-block;
 				border-radius: 6rpx;
 			}
-			.numbox{
+
+			.numbox {
 				position: absolute;
 				right: 0;
 				bottom: 0;
-				.skuSelect{
+
+				.skuSelect {
 					height: 40rpx;
-					padding:0 10rpx;
+					padding: 0 10rpx;
 					background: $brand-theme-color;
 					font-size: 28rpx;
-					color:#fff;
+					color: #fff;
 				}
 			}
 		}
-		
+
 	}
 </style>

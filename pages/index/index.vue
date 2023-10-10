@@ -12,8 +12,8 @@
 			<view class="scrollLayout">
 				<view class="leftScroll">
 					<scroll-view :scroll-top="leftScrollValue" scroll-with-animation scroll-y class="sContent">
-						<view class="navitem" :class="index==navIdx? 'active':''" v-for="(item,index) in 20"
-							@click="clickNav(index)">{{item}}</view>
+						<view class="navitem" :class="index==navIdx? 'active':''" v-for="(item,index) in dataList"
+							@click="clickNav(index)">{{item.name}}</view>
 					</scroll-view>
 				</view>
 				<view class="rightScroll">
@@ -23,14 +23,14 @@
 					</view>
 					<scroll-view :scroll-top="rightScrollValue" scroll-with-animation scroll-y class="sContent"
 						@scroll="rightScrollEnt">
-						<view class="productView" v-for="item in 20">
+						<view class="productView" v-for="item in dataList">
 							<!-- 吸顶组件：内部只能有一个根元素 -->
 							<u-sticky customNavHeight="0" zIndex="2">
-								<view class="proTitle">产品名称{{item}}</view>
+								<view class="proTitle">{{item.name}}</view>
 							</u-sticky>
 							<view class="proContent">
-								<view class="proitem" v-for="pro in 3">
-									<product-item></product-item>
+								<view class="proitem" v-for="pro in item.children">
+									<product-item :item="pro"></product-item>
 								</view>
 							</view>
 						</view>
@@ -39,11 +39,13 @@
 			</view>
 		</view>
 
-		<car-layout></car-layout>
+		<car-layout v-if="buyNum > 0"></car-layout>
 	</view>
 </template>
 
 <script>
+	import dataList from '@/static/mock-product.js'
+
 	import {
 		mapGetters,
 		mapMutations
@@ -57,6 +59,7 @@
 				rightScrollValue: 0,
 				leftHitArr: [],
 				rightHitArr: [],
+				dataList,
 			}
 		},
 		onLoad() {
@@ -66,7 +69,7 @@
 			})
 		},
 		computed: {
-			// ...mapGetters(['foldState'])
+			...mapGetters(['buyNum'])
 		},
 		methods: {
 			...mapMutations(['setFoldState']),

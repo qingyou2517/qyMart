@@ -11,5 +11,16 @@ const getters = {
 		return 100
 	},
 
+	carsList: state => state.cars.carsList,
+	totalPrice: state => {
+		return state.cars.carsList.reduce((prev, next) => {
+			return prev += next.price * next.numValue
+		}, 0)
+	},
+	buyNum: state => {
+		return state.cars.carsList.reduce((prev, next) => {
+			return prev += next.numValue
+		}, 0)
+	},
 }
 export default getters

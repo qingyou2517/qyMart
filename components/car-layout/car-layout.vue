@@ -8,8 +8,8 @@
 				</view>
 				<scroll-view scroll-y="true" class="body">
 					<view class="sContent">
-						<view class="caritem" v-for="item in 5">
-							<car-pro-item></car-pro-item>
+						<view class="caritem" v-for="item in carsList">
+							<car-pro-item :item="item"></car-pro-item>
 						</view>
 					</view>
 				</scroll-view>
@@ -19,9 +19,9 @@
 				<view class="left">
 					<view class="icon" hover-class="iconhover" hover-stay-time="50" @tap="clickCarIcon">
 						<u-icon name="shopping-cart" size="34" color="#EC544F"></u-icon>
-						<view class="num">5</view>
+						<view class="num">{{buyNum}}</view>
 					</view>
-					<view class="price">合计<text class="text">¥33.30</text></view>
+					<view class="price">合计<text class="text">¥{{totalPrice}}</text></view>
 				</view>
 				<view class="right">
 					<view class="btn" v-if="true">选好了</view>
@@ -37,12 +37,21 @@
 </template>
 
 <script>
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
+
 	export default {
 		name: "car-layout",
 		data() {
 			return {
 				carshow: false,
 			};
+		},
+		computed:{
+			...mapGetters(['carsList','totalPrice','buyNum']),
+			
 		},
 		methods: {
 			clickCarIcon() {
