@@ -40,43 +40,25 @@
 </template>
 
 <script>
+	import {
+		mapGetters
+	} from 'vuex'
+
 	export default {
 		name: "custom-head-bar",
 		data() {
 			return {
-				statusBarHeight: 0,
-				titleBarHeight: 0,
+
 			};
 		},
 		props: {
-			foldState: {
-				type: Boolean,
-				defaultValue: false
-			}
+
 		},
 		computed: {
-			totalHeight() {
-				if (this.foldState) return this.statusBarHeight + this.titleBarHeight + 10
-				return this.statusBarHeight + this.titleBarHeight + 100 + 10
-			},
-			bodyBarHeight() {
-				if (this.foldState) return this.titleBarHeight
-				return 100
-			}
+			...mapGetters(['statusBarHeight', 'titleBarHeight', 'totalHeight', 'bodyBarHeight', 'foldState']),
 		},
 		mounted() {
-			let systemInfo = uni.getSystemInfoSync();
-			this.statusBarHeight = systemInfo.statusBarHeight || 20;
 
-			// #ifdef MP-WEIXIN
-			// 计算胶囊按钮所在父盒子的高度
-			let menuBtnInfo = uni.getMenuButtonBoundingClientRect();
-			this.titleBarHeight = menuBtnInfo.height + (menuBtnInfo.top - this.statusBarHeight) * 2
-			// #endif
-
-			// #ifndef MP-WEIXIN
-			this.titleBarHeight = 40
-			// #endif
 		}
 	}
 </script>

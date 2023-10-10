@@ -1,6 +1,6 @@
 <template>
 	<view class="home">
-		<custom-head-bar id="customHeadBar" :foldState="foldState"></custom-head-bar>
+		<custom-head-bar id="customHeadBar"></custom-head-bar>
 		<view class="wrapper">
 			<view class="infoModel">
 				<view class="left">免费配送</view>
@@ -44,6 +44,11 @@
 </template>
 
 <script>
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
+
 	export default {
 		data() {
 			return {
@@ -52,7 +57,6 @@
 				rightScrollValue: 0,
 				leftHitArr: [],
 				rightHitArr: [],
-				foldState: false,
 			}
 		},
 		onLoad() {
@@ -61,7 +65,12 @@
 				this.getHeightArr();
 			})
 		},
+		computed: {
+			// ...mapGetters(['foldState'])
+		},
 		methods: {
+			...mapMutations(['setFoldState']),
+
 			// 点击左侧导航菜单
 			clickNav(index) {
 				if (this.navIdx === index) return;
@@ -101,8 +110,12 @@
 				this.navIdx = idx
 				this.leftScrollValue = this.leftHitArr[idx];
 
-				if (scrolltop <= 300) this.foldState = false
-				if (scrolltop >= 400) this.foldState = true
+				if (scrolltop <= 300) {
+					this.setFoldState(false)
+				}
+				if (scrolltop >= 400) {
+					this.setFoldState(true)
+				}
 			}
 		}
 	}
