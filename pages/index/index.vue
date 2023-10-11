@@ -17,10 +17,10 @@
 					</scroll-view>
 				</view>
 				<view class="rightScroll">
-					<view class="searchView">
+					<navigator class="searchView" url="/pages/search/search">
 						<u-icon name="search" size="22" color="#576b95"></u-icon>
 						搜索
-					</view>
+					</navigator>
 					<scroll-view :scroll-top="rightScrollValue" scroll-with-animation scroll-y class="sContent"
 						@scroll="rightScrollEnt">
 						<view class="productView" v-for="item in dataList">
