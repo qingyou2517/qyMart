@@ -17,15 +17,15 @@
 
 			<view class="content">
 				<view class="left">
-					<view class="icon" hover-class="iconhover" hover-stay-time="50" @tap="clickCarIcon">
+					<view class="icon" v-if="!type" hover-class="iconhover" hover-stay-time="50" @tap="clickCarIcon">
 						<u-icon name="shopping-cart" size="34" color="#EC544F"></u-icon>
 						<view class="num">{{buyNum}}</view>
 					</view>
 					<view class="price">合计<text class="text">¥{{totalPrice}}</text></view>
 				</view>
 				<view class="right">
-					<view class="btn" v-if="true">选好了</view>
-					<view class="btn" v-else>支付</view>
+					<view class="btn" v-if="!type" @click="goPay">选好了</view>
+					<view class="btn" v-else @click="confirmPay">确认支付</view>
 				</view>
 			</view>
 
@@ -49,13 +49,27 @@
 				carshow: false,
 			};
 		},
-		computed:{
-			...mapGetters(['carsList','totalPrice','buyNum']),
-			
+		props: {
+			type: {
+				type: String,
+				defaultValue: ''
+			}
+		},
+		computed: {
+			...mapGetters(['carsList', 'totalPrice', 'buyNum']),
+
 		},
 		methods: {
+			goPay() {
+				uni.navigateTo({
+					url: '/pages/paypage/paypage'
+				})
+			},
 			clickCarIcon() {
 				this.carshow = !this.carshow
+			},
+			confirmPay(e){
+				console.log('确认支付')
 			}
 		}
 	}

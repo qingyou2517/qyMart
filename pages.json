@@ -36,6 +36,15 @@
             }
             
         }
+        ,{
+            "path" : "pages/paypage/paypage",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "确认订单",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
