@@ -43,7 +43,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.delivery {
 		.headNav {
 			width: 100%;

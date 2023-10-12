@@ -33,6 +33,9 @@
 			return {
 
 			};
+		},
+		options: {
+			styleIsolation: 'shared',
 		}
 	}
 </script>

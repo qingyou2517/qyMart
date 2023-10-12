@@ -63,7 +63,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.customHead {
 		height: 400rpx;
 

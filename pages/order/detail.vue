@@ -65,7 +65,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	page {
 		background: $page-bg-color;
 	}

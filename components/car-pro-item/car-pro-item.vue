@@ -30,7 +30,7 @@
 		props: {
 			item: {
 				type: Object,
-				defaultValue() {
+				default() {
 					return {}
 				}
 			}

@@ -6,15 +6,16 @@
 			<goods-list></goods-list>
 		</view>
 
+		<!-- #ifndef MP-WEIXIN -->
 		<view class="paytype">
 			<view class="box" :class="item.value == payDefValue ? 'active':''" v-for="item in payType"
 				@click="clickPayBtn(item.value)">
 				<!-- 渲染支付方式的图标 -->
-				<u-icon :name="item.value === 'alipay'?'zhifubao':''" color="#1578FF" class="icon" size="26"></u-icon>
-				<u-icon :name="item.value === 'wxpay'?'weixin-fill':''" color="#04C15F" class="icon" size="26"></u-icon>
+				<u-icon :name="item.icon" :color="item.color" class="icon" size="26"></u-icon>
 				<text class="font">{{item.name}}</text>
 			</view>
 		</view>
+		<!-- #endif -->
 
 		<view class="payTabbar">
 			<car-layout type="pay"></car-layout>
@@ -26,13 +27,24 @@
 	export default {
 		data() {
 			return {
+				// #ifndef MP-WEIXIN 
 				payDefValue: "alipay",
+				// #endif
+
+				// #ifdef MP-WEIXIN 
+				payDefValue: "wxpay",
+				// #endif
+
 				payType: [{
 					name: "支付宝",
-					value: "alipay"
+					value: "alipay",
+					color: "#1578FF",
+					icon: "zhifubao",
 				}, {
 					name: "微信",
-					value: "wxpay"
+					value: "wxpay",
+					color: "#04C15F",
+					icon: "weixin-fill",
 				}],
 			};
 		},
@@ -45,7 +57,7 @@
 	}
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 	page {
 		background: $page-bg-color;
 	}

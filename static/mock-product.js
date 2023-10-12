@@ -26,6 +26,13 @@ let dataList = [{
 		before_price: 36,
 		thumb: "https://mp-3309c116-4743-47d6-9979-462d2edf878c.cdn.bspapp.com/cloudstorage/6758e11c-949b-48c5-ae69-ddad030c2f94.png",
 		numValue: 0
+	},{
+		goodsid: 22,
+		name: "达利园法式小面包",
+		price: 25,
+		before_price: 36,
+		thumb: "https://mp-3309c116-4743-47d6-9979-462d2edf878c.cdn.bspapp.com/cloudstorage/6758e11c-949b-48c5-ae69-ddad030c2f94.png",
+		numValue: 0
 	}]
 }, {
 	id: 3,
@@ -33,6 +40,20 @@ let dataList = [{
 	children: [{
 		goodsid: 31,
 		name: "韩国烧酒",
+		price: 18,
+		before_price: 29,
+		thumb: "https://mp-3309c116-4743-47d6-9979-462d2edf878c.cdn.bspapp.com/cloudstorage/b1a12bee-0602-4cb5-927d-b2b246700e89.jpeg",
+		numValue: 0
+	},{
+		goodsid: 32,
+		name: "宫廷玉液酒",
+		price: 180,
+		before_price: 290,
+		thumb: "https://mp-3309c116-4743-47d6-9979-462d2edf878c.cdn.bspapp.com/cloudstorage/b1a12bee-0602-4cb5-927d-b2b246700e89.jpeg",
+		numValue: 0
+	},{
+		goodsid: 33,
+		name: "韩国烧酒3",
 		price: 18,
 		before_price: 29,
 		thumb: "https://mp-3309c116-4743-47d6-9979-462d2edf878c.cdn.bspapp.com/cloudstorage/b1a12bee-0602-4cb5-927d-b2b246700e89.jpeg",

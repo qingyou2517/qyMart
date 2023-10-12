@@ -52,7 +52,7 @@
 		props: {
 			type: {
 				type: String,
-				defaultValue: ''
+				default: ''
 			}
 		},
 		computed: {

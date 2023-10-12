@@ -77,7 +77,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	.addressForm {
 		padding: 30rpx;
 	}
