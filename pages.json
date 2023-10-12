@@ -68,6 +68,27 @@
 				"enablePullDownRefresh": false
 			}
 
+		}, {
+			"path": "goods/list",
+			"style": {
+				"navigationBarTitleText": "商品列表",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "goods/add",
+			"style": {
+				"navigationBarTitleText": "新增商品",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "brand/brand",
+			"style": {
+				"navigationBarTitleText": "商户信息",
+				"enablePullDownRefresh": false
+			}
+
 		}]
 	}],
 	"globalStyle": {
