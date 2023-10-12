@@ -6,65 +6,70 @@
 				"navigationBarTitleText": "青游商铺",
 				"navigationStyle": "custom"
 			}
+		}, {
+			"path": "pages/order/order",
+			"style": {
+				"navigationBarTitleText": "我的订单",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFF"
+			}
+
+		}, {
+			"path": "pages/order/detail",
+			"style": {
+				"navigationBarTitleText": "订单详情",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFF"
+			}
+
+		}, {
+			"path": "pages/paypage/paypage",
+			"style": {
+				"navigationBarTitleText": "确认订单",
+				"enablePullDownRefresh": false
+			}
+
+		}, {
+			"path": "pages/address/list",
+			"style": {
+				"navigationBarTitleText": "我的地址",
+				"enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFF"
+			}
+
+		}, {
+			"path": "pages/address/edit",
+			"style": {
+				"navigationBarTitleText": "编辑地址",
+				"enablePullDownRefresh": false
+			}
+
 		}
-	    ,{
-            "path" : "pages/order/order",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的订单",
-                "enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#FFF"
-            }
-            
-        }
-        ,{
-            "path" : "pages/order/detail",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "订单详情",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/search/search",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "搜索",
-                "enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#FFF"
-            }
-            
-        }
-        ,{
-            "path" : "pages/paypage/paypage",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "确认订单",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-        ,{
-            "path" : "pages/address/list",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "我的地址",
-                "enablePullDownRefresh": false,
-				"navigationBarBackgroundColor": "#FFF"
-            }
-            
-        }
-        ,{
-            "path" : "pages/address/edit",
-            "style" :                                                                                    
-            {
-                "navigationBarTitleText": "编辑地址",
-                "enablePullDownRefresh": false
-            }
-            
-        }
-    ],
+	],
+	"subPackages": [{
+		"root": "pages_manage",
+		"pages": [{
+			"path": "index/index",
+			"style": {
+				"navigationBarTitleText": "后台管理首页",
+				"enablePullDownRefresh": false
+			}
+		}, {
+			"path": "category/category",
+			"style": {
+				"navigationBarTitleText": "分类管理",
+				"enablePullDownRefresh": false
+			}
+
+		}]
+	}],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
 		"navigationBarTitleText": "uni-app",
