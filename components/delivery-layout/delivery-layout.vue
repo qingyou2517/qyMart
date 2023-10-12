@@ -3,7 +3,7 @@
 		<view class="headNav">外送</view>
 
 		<view class="body">
-			<view class="box">
+			<view class="box" @click="goAddress">
 				<view class="left">收货地址</view>
 				<view class="center">
 					<view v-if="true">
@@ -32,6 +32,13 @@
 					mobile: 13105556888,
 				}
 			};
+		},
+		methods:{
+			goAddress(){
+				uni.navigateTo({
+					url:"/pages/address/list"
+				})
+			}
 		}
 	}
 </script>

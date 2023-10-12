@@ -45,6 +45,25 @@
             }
             
         }
+        ,{
+            "path" : "pages/address/list",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "我的地址",
+                "enablePullDownRefresh": false,
+				"navigationBarBackgroundColor": "#FFF"
+            }
+            
+        }
+        ,{
+            "path" : "pages/address/edit",
+            "style" :                                                                                    
+            {
+                "navigationBarTitleText": "编辑地址",
+                "enablePullDownRefresh": false
+            }
+            
+        }
     ],
 	"globalStyle": {
 		"navigationBarTextStyle": "black",
