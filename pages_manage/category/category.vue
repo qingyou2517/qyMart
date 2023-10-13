@@ -12,8 +12,8 @@
 				<view class="name">{{item.name}}</view>
 			</view>
 			<view class="right">
-				<u-icon name="edit-pen" size="26" color="#576b95" @click="updateData(index,item.name)"></u-icon>
-				<u-icon name="trash" size="26" color="#EC544F" @click="deleteDate(index)"></u-icon>
+				<u-icon name="edit-pen" size="26" color="#576b95" @click="updateData(item._id,item.name)"></u-icon>
+				<u-icon name="trash" size="26" color="#EC544F" @click="deleteData(item._id)"></u-icon>
 			</view>
 		</view>
 
@@ -26,42 +26,47 @@
 </template>
 
 <script>
+	const db = uniCloud.database()
 	export default {
 		data() {
 			return {
-				categoryList: [{
-					_id: 1,
-					name: "干果"
-				}, {
-					_id: 2,
-					name: "饮料"
-				}, {
-					_id: 3,
-					name: "酒类"
-				}],
+				categoryList: [],
 				iptValue: "", // 输入框的默认值
 				functionType: "", // 对话框的触发场景，分为 "add"、"update"
-				index: -1, // 编辑类名时需要知道是 categoryList 的哪一项
+				updateId: null, // 编辑类名时需要知道是 categoryList 的哪一项
 			};
 		},
+		onLoad() {
+			this.getCategoryList()
+		},
 		methods: {
+			// 从数据库获取分类列表
+			getCategoryList() {
+				db.collection('qy-mall-categories').get().then((res) => {
+					this.categoryList = res.result.data
+				})
+			},
 			//添加分类
 			clickAdd() {
 				this.functionType = "add"
+				this.iptValue = ""; // 新增类名时，输入框不应该有默认值
+				// this.updateId = null	
 				this.$refs.inputDialog.open();
 			},
-			updateData(index, name) {
+			updateData(id, name) {
 				this.functionType = "update"
-				this.iptValue = name;
-				this.index = index
+				this.iptValue = name; // 编辑类名时，输入框默认值应该为原先的类名
+				this.updateId = id
 				this.$refs.inputDialog.open()
 			},
-			deleteDate(index) {
+			deleteData(_id) {
 				uni.showModal({
 					content: "是否删除该分类?",
 					success: res => {
 						if (res.confirm) {
-							this.categoryList.splice(index, 1)
+							db.collection('qy-mall-categories').doc(_id).remove().then((res) => {
+								this.getCategoryList()
+							})
 						}
 					},
 					fail: err => {
@@ -69,16 +74,18 @@
 					}
 				})
 			},
-			dialogConfirm(value) {
+			async dialogConfirm(value) {
 				if (this.functionType === "add") {
-					this.iptValue = ""; // 新增类名时，输入框不应该有默认值
-					this.categoryList.push({
-						name: value,
-						_id: Date.now()
+					await db.collection('qy-mall-categories').add({
+						name: value
 					})
 				} else if (this.functionType === "update") {
-					this.categoryList[this.index].name = value
+					this.iptValue = value
+					await db.collection('qy-mall-categories').doc(this.updateId).update({
+						name: value
+					})
 				}
+				this.getCategoryList()
 			},
 		}
 	}
