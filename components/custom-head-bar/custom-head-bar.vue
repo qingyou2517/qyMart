@@ -10,7 +10,7 @@
 				<view class="kefu">
 					<u-icon name="server-fill" size="22" color="#fff"></u-icon>
 				</view>
-				<navigator class="manage">
+				<navigator class="manage" url="/pages_manage/index/index">
 					<u-icon name="bag-fill" size="22" color="#fff"></u-icon>
 					后台管理
 				</navigator>

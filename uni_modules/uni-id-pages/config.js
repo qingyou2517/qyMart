@@ -7,24 +7,13 @@ export default {
 	*/
   isAdmin: false, // 区分管理端与用户端
   loginTypes: [
-    // "qq",
-    // "xiaomi",
-    // "sinaweibo",
-    // "taobao",
-    // "facebook",
-    // "google",
-    // "alipay",
-    // "douyin",
 
-    // #ifdef APP
-    'univerify',
-    // #endif
-    'weixin',
     'username',
-    // #ifdef APP
-    'apple',
-    // #endif
-    'smsCode'
+	'smsCode',
+	// #ifdef MP-WEIXIN
+    
+    'weixin',
+	// #endif
   ],
   // 政策协议
   agreements: {
