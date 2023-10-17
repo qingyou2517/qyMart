@@ -68,7 +68,7 @@
 			clickCarIcon() {
 				this.carshow = !this.carshow
 			},
-			confirmPay(e){
+			confirmPay(e) {
 				console.log('确认支付')
 			}
 		}
@@ -161,12 +161,6 @@
 					}
 				}
 			}
-		}
-
-		.safe-area-bottom {
-			width: 100%;
-			height: env(safe-area-inset-bottom);
-			background: #fff;
 		}
 	}
 </style>
