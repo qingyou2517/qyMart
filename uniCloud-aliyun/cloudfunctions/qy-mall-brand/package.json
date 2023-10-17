@@ -1,0 +1,7 @@
+{
+  "name": "qy-mall-brand",
+  "dependencies": {},
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
