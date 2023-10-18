@@ -82,6 +82,7 @@
 </template>
 
 <script>
+	const skuCloudObj = uniCloud.importObject('qy-mall-sku')
 	export default {
 		data() {
 			return {
@@ -94,36 +95,7 @@
 					description: "",
 				},
 				addAttrType: "parent", //parent代表父，child代表子
-				// skuArr: [],
-				skuArr: [{
-					_id: 1,
-					skuName: "颜色",
-					checked: false,
-					children: [{
-						name: "黑色",
-						checked: false
-					}, {
-						name: "红色",
-						checked: false
-					}, {
-						name: "白色",
-						checked: false
-					}]
-				}, {
-					_id: 2,
-					skuName: "规格",
-					checked: false,
-					children: [{
-						name: "L",
-						checked: false
-					}, {
-						name: "M",
-						checked: false
-					}, {
-						name: "S",
-						checked: false
-					}]
-				}],
+				skuArr: [],
 				goodsRules: {
 					name: {
 						rules: [{
@@ -146,7 +118,15 @@
 				}
 			};
 		},
+		onLoad() {
+
+		},
 		methods: {
+			// 获取商品属性（即sku） 列表
+			async getSkuData() {
+				let res = await skuCloudObj.get()
+				this.skuArr = res.data
+			},
 			// 点击提交表单
 			onSubmit() {
 				this.$refs.goodsForm.validate().then(res => {
@@ -157,6 +137,7 @@
 			},
 			// 点击选择商品属性，触发底部弹出层
 			clickSelect() {
+				this.getSkuData()
 				this.$refs.attrWrapPop.open();
 			},
 			// 点击添加属性，触发对话框
@@ -177,20 +158,27 @@
 				this.skuArr[index].children[cIdx].checked = !this.skuArr[index].children[cIdx].checked
 			},
 			// 添加属性时的对话框的确认事件
-			dialogConfirm(value) {
+			async dialogConfirm(value) {
 				if (!value) return;
 
 				if (this.addAttrType === "parent") {
-					this.skuArr.push({
+					let obj = {
 						skuName: value,
 						checked: true,
 						children: []
-					})
+					}
+					let res = await skuCloudObj.add(obj) // 往云数据库 add 成功返回值包含一个id
+					obj._id = res.id
+					this.skuArr.push(obj)
 				} else if (this.addAttrType === "child") {
-					this.skuArr[this.attrIndex].children.push({
+					let obj = {
 						name: value,
 						checked: true
-					})
+					}
+					let _id = this.skuArr[this.attrIndex]._id
+					console.log(_id)
+					let res = await skuCloudObj.updateChild(_id, obj)
+					this.skuArr[this.attrIndex].children.push(obj)
 				}
 			},
 			clickConfirmSelect() {
