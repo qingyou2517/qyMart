@@ -92,6 +92,7 @@
 	const goodsCloudObj = uniCloud.importObject('qy-mall-goods', {
 		customUI: true
 	})
+	let goodID;
 	export default {
 		data() {
 			return {
@@ -128,8 +129,12 @@
 				}
 			};
 		},
-		onLoad() {
-
+		onLoad(e) {
+			goodID = e?.id ?? null
+			if (goodID) {
+				this.getGoodsOne(goodID)
+			}
+			this.getSkuData()
 		},
 		computed: {
 			skuTitle() {
@@ -144,6 +149,13 @@
 			}
 		},
 		methods: {
+			// 获取某个商品的信息
+			async getGoodsOne(goodID) {
+				let res = await goodsCloudObj.getOne(goodID)
+				// console.log(res.data)
+				this.goodsFormData = res.data[0]
+			},
+
 			// 返回子级属性的名称
 			skuChildName(arr) {
 				let newArr = arr.map(item => {
@@ -151,11 +163,13 @@
 				})
 				return newArr.join('/')
 			},
+
 			// 获取商品属性（即sku） 列表
 			async getSkuData() {
 				let res = await skuCloudObj.get()
 				this.skuArr = res.data
 			},
+
 			// 点击提交表单
 			onSubmit() {
 				this.$refs.goodsForm.validate().then(res => {
@@ -164,8 +178,9 @@
 					console.log(err);
 				})
 			},
+
 			// 上传商品信息到数据库
-			toDataBase() {
+			async toDataBase() {
 				this.goodsFormData.thumb = this.goodsFormData.thumb.map(item => {
 					return {
 						url: item.url,
@@ -173,20 +188,55 @@
 						extname: item.extname
 					}
 				})
-				let res = goodsCloudObj.add(this.goodsFormData)
-				uni.showToast({
-					title: "新增商品成功"
-				})
+
+				if (goodID) { // 区分
+					let res = await goodsCloudObj.update(this.goodsFormData)
+					uni.showToast({
+						title: "修改成功"
+					})
+				} else {
+					let res = await goodsCloudObj.add(this.goodsFormData)
+					uni.showToast({
+						title: "新增商品成功"
+					})
+				}
+
+				let pages = getCurrentPages() // 页面栈，栈顶（数组尾项）为当前页面
+				let before_page = pages[pages.length - 2] // 上一页面
 				setTimeout(() => {
-					uni.navigateBack()
+					uni.navigateBack({
+						delta: 1,
+						success: () => {
+							if (before_page.$vm.hasOwnProperty('getGoodsList')) {
+								before_page.$vm.getGoodsList()
+							}
+						}
+					})
 				}, 1500)
 			},
+
 			// 点击选择商品属性，触发底部弹出层
 			clickSelect() {
 				this.$refs.attrWrapPop.open(); // 打开弹出层
-				if (this.skuArr.length) return; // 假如已有，则阻断 get
-				this.getSkuData() // get 请求数据库
+				// 根据 sku_select 的已选一级属性，把 skuArr 的对应一级属性的 checked 设为 true
+				this.arrSetCheck(this.skuArr, this.goodsFormData.sku_select, "_id")
 			},
+
+			// 遍历数组，标记 checked
+			arrSetCheck(arr1, arr2, key) {
+				arr1.forEach(item => {
+					arr2.forEach(row => {
+						if (row[key] === item[key]) {
+							item.checked = true
+
+							if (item?.children?.length) {
+								this.arrSetCheck(item.children, row.children, "name")
+							}
+						}
+					})
+				})
+			},
+
 			// 点击添加属性，触发对话框
 			clickAddAttr(index = null) {
 				if (index !== null) {
@@ -204,6 +254,7 @@
 			clickChlidBtn(index, cIdx) {
 				this.skuArr[index].children[cIdx].checked = !this.skuArr[index].children[cIdx].checked
 			},
+
 			// 添加属性时的对话框的确认事件
 			async dialogConfirm(value) {
 				if (!value) return;
@@ -223,7 +274,6 @@
 						checked: true
 					}
 					let _id = this.skuArr[this.attrIndex]._id
-					console.log(_id)
 					let res = await skuCloudObj.updateChild(_id, obj)
 					this.skuArr[this.attrIndex].children.push(obj)
 				}
