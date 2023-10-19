@@ -25,7 +25,13 @@
 			</uni-forms-item>
 
 			<uni-forms-item label="商品属性">
-				<u-cell title="点击选择属性" isLink :border="false" @click="clickSelect"></u-cell>
+				<u-cell :title="skuTitle" class="skuTitle" isLink :border="false" @click="clickSelect"></u-cell>
+				<view class="skuList">
+					<view class="item" v-for="item in goodsFormData.sku_select" @click="clickSelect">
+						<view class="left">{{item.skuName}}:</view>
+						<view class="right">{{skuChildName(item.children)}}</view>
+					</view>
+				</view>
 			</uni-forms-item>
 
 			<uni-forms-item label="商品描述">
@@ -93,6 +99,7 @@
 					price: null,
 					before_price: null,
 					description: "",
+					sku_select: [],
 				},
 				addAttrType: "parent", //parent代表父，child代表子
 				skuArr: [],
@@ -121,7 +128,26 @@
 		onLoad() {
 
 		},
+		computed: {
+			skuTitle() {
+				if (this.goodsFormData.sku_select.length) {
+					let arr = this.goodsFormData.sku_select.map(item => {
+						return item.skuName
+					})
+					return arr.join("/")
+				} else {
+					return "点击添加属性"
+				}
+			}
+		},
 		methods: {
+			// 返回子级属性的名称
+			skuChildName(arr) {
+				let newArr = arr.map(item => {
+					return item.name
+				})
+				return newArr.join('/')
+			},
 			// 获取商品属性（即sku） 列表
 			async getSkuData() {
 				let res = await skuCloudObj.get()
@@ -137,8 +163,9 @@
 			},
 			// 点击选择商品属性，触发底部弹出层
 			clickSelect() {
-				this.getSkuData()
-				this.$refs.attrWrapPop.open();
+				this.$refs.attrWrapPop.open(); // 打开弹出层
+				if (this.skuArr.length) return; // 假如已有，则阻断 get
+				this.getSkuData() // get 请求数据库
 			},
 			// 点击添加属性，触发对话框
 			clickAddAttr(index = null) {
@@ -182,7 +209,20 @@
 				}
 			},
 			clickConfirmSelect() {
-
+				let arr = this.skuArr.filter(item => {
+					let state = item.children.some(child => child.checked)
+					return item.checked && state  // 获取已选择、且有选择子级属性 的一级属性列表
+				}).map(item => {
+					let children = item.children.filter(child => {
+						return child.checked // 一级属性下已选择的二级属性列表(children)
+					})
+					return {
+						...item,
+						children
+					}
+				})
+				this.goodsFormData.sku_select = arr
+				this.$refs.attrWrapPop.close()
 			}
 		}
 	}
@@ -191,6 +231,19 @@
 <style lang="scss" scoped>
 	.goodsView {
 		padding: 30rpx;
+
+		.skuTitle {
+			@include ellipsis()
+		}
+
+		.skuList {
+			.item {
+				padding: 30rpx;
+				background: $page-bg-color;
+				margin: 15rpx 0;
+				@include flex-box-set(start);
+			}
+		}
 	}
 
 	.attrWrapper {
