@@ -10,7 +10,7 @@
 			</uni-forms-item>
 
 			<uni-forms-item label="产品分类" required name="category_id">
-				<uni-data-select collection="qy-mall-category" field="_id as value, name as text"
+				<uni-data-select collection='qy-mall-categories' field="_id as value, name as text"
 					v-model="goodsFormData.category_id"></uni-data-select>
 			</uni-forms-item>
 
@@ -89,6 +89,9 @@
 
 <script>
 	const skuCloudObj = uniCloud.importObject('qy-mall-sku')
+	const goodsCloudObj = uniCloud.importObject('qy-mall-goods', {
+		customUI: true
+	})
 	export default {
 		data() {
 			return {
@@ -156,10 +159,27 @@
 			// 点击提交表单
 			onSubmit() {
 				this.$refs.goodsForm.validate().then(res => {
-					console.log(res);
+					this.toDataBase()
 				}).catch(err => {
 					console.log(err);
 				})
+			},
+			// 上传商品信息到数据库
+			toDataBase() {
+				this.goodsFormData.thumb = this.goodsFormData.thumb.map(item => {
+					return {
+						url: item.url,
+						name: item.name,
+						extname: item.extname
+					}
+				})
+				let res = goodsCloudObj.add(this.goodsFormData)
+				uni.showToast({
+					title: "新增商品成功"
+				})
+				setTimeout(() => {
+					uni.navigateBack()
+				}, 1500)
 			},
 			// 点击选择商品属性，触发底部弹出层
 			clickSelect() {
