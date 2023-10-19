@@ -169,7 +169,7 @@
 			},
 			// 点击添加属性，触发对话框
 			clickAddAttr(index = null) {
-				if (index) {
+				if (index !== null) {
 					this.addAttrType = "child"
 					this.attrIndex = index
 				} else {
@@ -211,7 +211,7 @@
 			clickConfirmSelect() {
 				let arr = this.skuArr.filter(item => {
 					let state = item.children.some(child => child.checked)
-					return item.checked && state  // 获取已选择、且有选择子级属性 的一级属性列表
+					return item.checked && state // 获取已选择、且有选择子级属性 的一级属性列表
 				}).map(item => {
 					let children = item.children.filter(child => {
 						return child.checked // 一级属性下已选择的二级属性列表(children)
