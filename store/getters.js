@@ -1,4 +1,5 @@
 const getters = {
+	// system
 	statusBarHeight: state => state.system.statusBarHeight,
 	titleBarHeight: state => state.system.titleBarHeight,
 	foldState: state => state.system.foldState,
@@ -11,6 +12,7 @@ const getters = {
 		return 100
 	},
 
+	// cars
 	carsList: state => state.cars.carsList,
 	totalPrice: state => {
 		return state.cars.carsList.reduce((prev, next) => {
@@ -22,5 +24,8 @@ const getters = {
 			return prev += next.numValue
 		}, 0)
 	},
+
+	// brand
+	brandData: state => state.brand.brandData,
 }
 export default getters

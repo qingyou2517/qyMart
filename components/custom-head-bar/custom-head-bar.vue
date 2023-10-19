@@ -1,49 +1,55 @@
 <template>
-	<view class="customHead" :style="{height:totalHeight + 'px'}">
-		<view class="bg">
-			<image class="bgImg" src="../../static/images/testlogo.jpg" mode="aspectFill"></image>
-		</view>
+	<view>
+		<view class="customHead" :style="{height:totalHeight + 'px'}" v-if="brandData.name">
+			<view class="bg">
+				<image class="bgImg" src="../../static/images/testlogo.jpg" mode="aspectFill"></image>
+			</view>
 
-		<view class="container">
-			<view class="statusBar" :style="{height: statusBarHeight + 'px'}"></view>
-			<view class="service" :style="{height: titleBarHeight + 'px'}" v-if="!foldState">
-				<view class="kefu">
-					<u-icon name="server-fill" size="22" color="#fff"></u-icon>
-				</view>
-				<navigator class="manage" url="/pages_manage/index/index">
-					<u-icon name="bag-fill" size="22" color="#fff"></u-icon>
-					后台管理
-				</navigator>
-			</view>
-			<view class="body" :class="foldState?'fold':''" :style="{height:bodyBarHeight + 'px'}">
-				<view class="brand">
-					<view class="pic">
-						<image class="img" src="../../static/images/pinkpic.jpg" mode="aspectFill"></image>
+			<view class="container">
+				<view class="statusBar" :style="{height: statusBarHeight + 'px'}"></view>
+				<view class="service" :style="{height: titleBarHeight + 'px'}" v-if="!foldState">
+					<view class="kefu">
+						<u-icon name="server-fill" size="22" color="#fff"></u-icon>
 					</view>
-					<view class="text">
-						<view class="title">
-							<text class="font">青游商铺</text>
-							<u-icon class="icon" name="more-circle" size="22" color="#fff"></u-icon>
+					<navigator class="manage" url="/pages_manage/index/index">
+						<u-icon name="bag-fill" size="22" color="#fff"></u-icon>
+						后台管理
+					</navigator>
+				</view>
+				<view class="body" :class="foldState?'fold':''" :style="{height:bodyBarHeight + 'px'}">
+					<view class="brand">
+						<view class="pic">
+							<image class="img" :src="brandData.thumb[0].url" mode="aspectFill	"></image>
 						</view>
-						<view class="des">一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍一大堆的品牌介绍</view>
+						<view class="text">
+							<view class="title">
+								<text class="font">{{brandData.name}}</text>
+								<u-icon class="icon" name="more-circle" size="22" color="#fff"></u-icon>
+							</view>
+							<view class="des">{{brandData.about}}</view>
+						</view>
 					</view>
-				</view>
-				<view class="code">
-					<view class="pic">
-						<image class="img" src="../../static/images/qrcode.png" mode="aspectFill"></image>
+					<view class="code">
+						<view class="pic">
+							<image class="img" src="../../static/images/qrcode.png" mode="aspectFill"></image>
+						</view>
+						<text class="pay">付款</text>
 					</view>
-					<text class="pay">付款</text>
 				</view>
 			</view>
 		</view>
+		
 	</view>
 </template>
 
 <script>
 	import {
-		mapGetters
+		mapGetters,
+		mapMutations,
+		mapActions
 	} from 'vuex'
 
+	const brandCloudObj = uniCloud.importObject('qy-mall-brand')
 	export default {
 		name: "custom-head-bar",
 		data() {
@@ -55,7 +61,14 @@
 
 		},
 		computed: {
-			...mapGetters(['statusBarHeight', 'titleBarHeight', 'totalHeight', 'bodyBarHeight', 'foldState']),
+			...mapGetters(['statusBarHeight', 'titleBarHeight', 'totalHeight', 'bodyBarHeight', 'foldState', 'brandData']),
+		},
+		created() {
+			this.getBrandData()
+		},
+		methods: {
+			// ...mapMutations(['setBrand'])
+			...mapActions(['getBrandData'])
 		},
 		mounted() {
 

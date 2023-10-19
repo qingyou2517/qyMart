@@ -29,6 +29,10 @@
 </template>
 
 <script>
+	import {
+		mapMutations
+	} from 'vuex'
+
 	const brandCloudObj = uniCloud.importObject("qy-mall-brand")
 
 	export default {
@@ -73,25 +77,27 @@
 			this.getBrand()
 		},
 		methods: {
-			addAndUpdate() {
+			...mapMutations(['setBrand']),
+			
+			// 新增或修改品牌信息
+			async addAndUpdate() {
+				let toastTitle;
 				if (this.brandFormData._id) {
-					brandCloudObj.update(this.brandFormData).then(res => {
-						uni.showToast({
-							title: "修改成功",
-							mask: true
-						})
-					})
+					await brandCloudObj.update(this.brandFormData)
+					toastTitle = "修改成功"
 				} else {
-					brandCloudObj.add(this.brandFormData).then(res => {
-						uni.showToast({
-							title: "新增成功",
-							mask: true
-						})
-					})
+					await brandCloudObj.add(this.brandFormData)
+					toastTitle = "新增成功"
 				}
+				uni.showToast({
+					title: toastTitle,
+					mask: true
+				})
 				setTimeout(() => {
 					uni.navigateBack()
 				}, 1500)
+
+				this.setBrand(this.brandFormData)
 			},
 			getBrand() {
 				brandCloudObj.get().then(res => {
