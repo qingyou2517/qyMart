@@ -1,7 +1,7 @@
 const goods = {
 	state: {
 		detailPopState: false, // 商品详情弹出层的开启和关闭
-		detailData: {}, // 商品详情数据
+		detailData: {}, // 商品详情弹出层的数据
 		proSpecsState: false, //规格详情弹出层的开启和关闭
 	},
 	mutations: {

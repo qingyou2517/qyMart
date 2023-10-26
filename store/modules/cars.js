@@ -9,7 +9,7 @@ const cars = {
 				num
 			} = params
 			let caritem = {
-				goodsid: item.goodsid,
+				goodsid: item._id || item.goodsid,
 				numValue: num,
 				name: item.name,
 				price: item.price,

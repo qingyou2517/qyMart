@@ -21,7 +21,7 @@
 						<u-icon name="shopping-cart" size="34" color="#EC544F"></u-icon>
 						<view class="num">{{buyNum}}</view>
 					</view>
-					<view class="price">合计<text class="text">¥{{totalPrice}}</text></view>
+					<view class="price">合计<text class="text">¥{{priceFormat(totalPrice)}}</text></view>
 				</view>
 				<view class="right">
 					<view class="btn" v-if="!type" @click="goPay">选好了</view>
@@ -41,6 +41,9 @@
 		mapGetters,
 		mapMutations
 	} from 'vuex'
+	import {
+		priceFormat
+	} from '@/utils/tools.js'
 
 	export default {
 		name: "car-layout",
@@ -60,6 +63,8 @@
 
 		},
 		methods: {
+			priceFormat,
+
 			goPay() {
 				uni.navigateTo({
 					url: '/pages/paypage/paypage'

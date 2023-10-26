@@ -42,7 +42,7 @@
 		<car-layout v-if="buyNum > 0"></car-layout>
 
 		<pro-detail-popup></pro-detail-popup>
-		
+
 		<pro-select-specs></pro-select-specs>
 	</view>
 </template>
@@ -50,7 +50,7 @@
 <script>
 	import {
 		mapGetters,
-		mapMutations
+		mapMutations,
 	} from 'vuex'
 
 	const goodsCloudObj = uniCloud.importObject('qy-mall-goods', {
@@ -85,6 +85,7 @@
 			// 获取所有商品
 			async getGoodsData() {
 				let res = await goodsCloudObj.getList()
+				console.log("res", res.data)
 				res.data.forEach(item => {
 					item.proGroup.forEach((child, idx) => {
 						child.numValue = 0
