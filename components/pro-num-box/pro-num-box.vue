@@ -21,7 +21,7 @@
 		name: "pro-num-box",
 		data() {
 			return {
-				dataItem: this.item,	// 暂时先使用 dataItem，后续连接了数据库再用.sync改
+				dataItem: this.item, // 暂时先使用 dataItem，后续连接了数据库再用.sync改
 			};
 		},
 		props: {
@@ -31,7 +31,7 @@
 			}
 		},
 		methods: {
-			...mapMutations(['setCarsList']),
+			...mapMutations(['setCarsList', 'setProSpecsState']),
 
 			numChange(e) {
 				this.setCarsList({

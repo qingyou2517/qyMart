@@ -29,7 +29,7 @@
 								<view class="proTitle">{{item.name}}</view>
 							</u-sticky>
 							<view class="proContent">
-								<view class="proitem" v-for="pro in item.children">
+								<view class="proitem" v-for="pro in item.proGroup">
 									<product-item :item="pro"></product-item>
 								</view>
 							</view>
@@ -40,16 +40,22 @@
 		</view>
 
 		<car-layout v-if="buyNum > 0"></car-layout>
+
+		<pro-detail-popup></pro-detail-popup>
+		
+		<pro-select-specs></pro-select-specs>
 	</view>
 </template>
 
 <script>
-	import dataList from '@/static/mock-product.js'
-
 	import {
 		mapGetters,
 		mapMutations
 	} from 'vuex'
+
+	const goodsCloudObj = uniCloud.importObject('qy-mall-goods', {
+		customUI: true
+	})
 
 	export default {
 		data() {
@@ -59,10 +65,12 @@
 				rightScrollValue: 0,
 				leftHitArr: [],
 				rightHitArr: [],
-				dataList,
+				dataList: [],
 			}
 		},
-		onLoad() {
+		async onLoad() {
+			await this.getGoodsData()
+
 			// DOM 渲染完毕再执行这个方法
 			this.$nextTick(() => {
 				this.getHeightArr();
@@ -73,6 +81,17 @@
 		},
 		methods: {
 			...mapMutations(['setFoldState']),
+
+			// 获取所有商品
+			async getGoodsData() {
+				let res = await goodsCloudObj.getList()
+				res.data.forEach(item => {
+					item.proGroup.forEach((child, idx) => {
+						child.numValue = 0
+					})
+				})
+				this.dataList = res.data
+			},
 
 			// 点击左侧导航菜单
 			clickNav(index) {
@@ -94,12 +113,12 @@
 				selectorQuery.select('#customHeadBar').boundingClientRect((rect) => {
 					customHeadBar = rect.height
 				})
-				// 左侧滚到区域的节点组
+				// 左侧滚动区域的节点组
 				selectorQuery.selectAll(".navitem").boundingClientRect(rects => {
 					this.leftHitArr = rects.map(item => item.top - customHeadBar - 40)
 				}).exec()
 
-				// 右侧滚到区域的节点组
+				// 右侧滚动区域的节点组
 				selectorQuery.selectAll(".productView").boundingClientRect(rects => {
 					this.rightHitArr = rects.map(item => item.top - customHeadBar - 40)
 				}).exec()

@@ -1,17 +1,19 @@
 <template>
-	<view class="pro-item">
+	<view class="pro-item" @click="showDetail">
 		<view class="pic">
-			<image class="img" :src="item.thumb" mode="aspectFill"></image>
+			<image class="img" :src="item.thumb[0].url" mode="aspectFill"></image>
 		</view>
 		<view class="text">
 			<view class="title">{{item.name}}</view>
 			<view class="price">
-				<view class="big">{{item.price}}</view>
-				<view class="small">{{item.before_price}}</view>
+				<view class="big">{{priceFormat(item.price)}}</view>
+				<view class="small" v-if="item.before_price">{{priceFormat(item.before_price)}}</view>
 			</view>
-			<view class="discount">3折</view>
-			<view class="numbox">
-				<view class="skuSelect" v-if="false">选规格</view>
+			<view class="discount" v-if="item.before_price && discount(item.price,item.before_price)">
+				{{discount(item.price,item.before_price)}}折
+			</view>
+			<view class="numbox" v-if="btnState">
+				<view class="skuSelect" v-if="item.sku_select.length" @click.stop="selectSpecs">选规格</view>
 				<view class="uNum" v-else>
 					<pro-num-box :item="item"></pro-num-box>
 				</view>
@@ -21,6 +23,16 @@
 </template>
 
 <script>
+	import {
+		priceFormat,
+		discount,
+	} from "@/utils/tools.js"
+
+	import {
+		mapGetters,
+		mapMutations
+	} from 'vuex'
+
 	export default {
 		name: "product-item",
 		data() {
@@ -31,13 +43,33 @@
 		props: {
 			item: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
+			},
+			btnState: {
+				type: Boolean,
+				default: true
 			}
 		},
 		methods: {
+			...mapMutations(['setDetailState', 'setDetailData', 'setProSpecsState']),
 
+			priceFormat,
+			discount,
+
+			// 展开商品详情
+			showDetail() {
+				if (!this.btnState) return;
+				this.setDetailState(true)
+				this.setDetailData(this.item) // item 是 props
+			},
+
+			// 点击选中规格，展开规格详情
+			selectSpecs() {
+				this.setProSpecsState(true)
+				this.setDetailData(this.item) // item 是 props
+			},
 		}
 	}
 </script>
@@ -46,7 +78,7 @@
 	.pro-item {
 		width: 100%;
 		padding: 25rpx 0;
-		@include flex-box();
+		display: flex;
 
 		.pic {
 			width: 180rpx;
@@ -74,7 +106,7 @@
 			.price {
 				@include flex-box-set(start, end);
 				font-weight: bold;
-				padding: 25rpx 0;
+				padding: 20rpx 0;
 
 				.big {
 					font-size: 34rpx;

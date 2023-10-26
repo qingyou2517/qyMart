@@ -17,7 +17,7 @@
 
 	/*每个页面公共css，上面不能加 scoped */
 	view,
-	text {
+	text,scroll-view {
 		box-sizing: border-box;
 	}
 

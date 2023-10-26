@@ -2,14 +2,14 @@
 	<view class="carProItem">
 		<view class="left">
 			<view class="pic">
-				<image class="img" :src="item.thumb" mode="aspectFill"></image>
+				<image class="img" :src="item.thumb[0].url" mode="aspectFill"></image>
 			</view>
 			<view class="text">
 				<view class="title">{{item.name}}</view>
 				<view class="sku" v-if="false"></view>
 				<view class="price">
-					<view class="big">￥{{item.price}}</view>
-					<view class="small">￥{{item.before_price}}</view>
+					<view class="big">￥{{priceFormat(item.price)}}</view>
+					<view class="small" v-if="item.before_price">￥{{priceFormat(item.before_price)}}</view>
 				</view>
 			</view>
 		</view>
@@ -20,6 +20,11 @@
 </template>
 
 <script>
+	import {
+		priceFormat,
+		discount
+	} from "@/utils/tools.js"
+
 	export default {
 		name: "car-pro-item",
 		data() {
@@ -30,11 +35,15 @@
 		props: {
 			item: {
 				type: Object,
-				default() {
+				default () {
 					return {}
 				}
 			}
 		},
+		methods: {
+			priceFormat,
+			discount,
+		}
 	}
 </script>
 
@@ -46,7 +55,7 @@
 
 		.left {
 			width: 500rpx;
-			@include flex-box();
+			@include flex-box-set(start, stretch);
 
 			.pic {
 				width: 110rpx;
