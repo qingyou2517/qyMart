@@ -41,7 +41,7 @@
 				</view>
 
 				<view class="footer">
-					<u-button color="#EC544F" icon="shopping-cart" iconColor="#fff">
+					<u-button color="#EC544F" icon="shopping-cart" iconColor="#fff" @click="clickAddCart">
 						加入购物车
 					</u-button>
 				</view>
@@ -72,7 +72,7 @@
 			...mapGetters(['detailPopState','detailData']),
 		},
 		methods: {
-			...mapMutations(['setDetailState']),
+			...mapMutations(['setDetailState','setProSpecsState']),
 			
 			priceFormat,
 			discount,
@@ -80,6 +80,11 @@
 			// 点击关闭弹出层
 			onClose() {
 				this.setDetailState(false)
+			},
+			
+			// 点击添加购物车
+			clickAddCart(){
+				this.setProSpecsState(true)
 			},
 		},
 	}

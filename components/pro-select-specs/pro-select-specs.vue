@@ -1,6 +1,6 @@
 <template>
 	<view class="proSpecs">
-		<u-popup :show="proSpecsState" @close="onClose" closeable round="10">
+		<u-popup :show="proSpecsState" @close="onClose" closeable round="10" z-index="20001" :overlayStyle="{zIndex:20000}">
 			<view class="proSpecsWrapper">
 				<view class="top"></view>
 
@@ -9,7 +9,7 @@
 						<view class="proItem">
 							<product-item :item="detailData" :btnState="false"></product-item>
 						</view>
-						<view class="selectWrapper">
+						<view class="selectWrapper" v-if="selectShow">
 							<view class="list" v-for="(item,itemIndex) in detailData.sku_select">
 								<view class="title">{{ item.skuName }}</view>
 								<view class="group">
@@ -52,6 +52,11 @@
 		},
 		computed: {
 			...mapGetters(['proSpecsState', 'detailData']),
+			
+			// 是否展示规格区域
+			selectShow(){
+				return this.detailData?.sku_select?.length ?? null
+			},
 
 			// 从 userSelect 里取出二级属性的 name，再维护成一个数组，用于动态绑定class判断
 			skuArr() {
@@ -69,7 +74,7 @@
 			},
 		},
 		methods: {
-			...mapMutations(['setProSpecsState']),
+			...mapMutations(['setProSpecsState','setDetailState']),
 			
 			// 规格按钮的点击效果
 			clickSelect(itemIndex, childIndex) {
@@ -101,6 +106,7 @@
 			// 确认购买
 			clickConfirm() {
 				this.onClose()
+				this.setDetailState(false)
 			},
 			
 			// 修改步进器的值
