@@ -8,7 +8,7 @@
 				</view>
 				<scroll-view scroll-y="true" class="body">
 					<view class="sContent">
-						<view class="caritem" v-for="item in carsList">
+						<view class="caritem" v-for="item in carsList" :key="item.goodsid+item.skuArr">
 							<car-pro-item :item="item"></car-pro-item>
 						</view>
 					</view>

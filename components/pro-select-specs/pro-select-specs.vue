@@ -1,6 +1,7 @@
 <template>
 	<view class="proSpecs">
-		<u-popup :show="proSpecsState" @close="onClose" closeable round="10" z-index="20001" :overlayStyle="{zIndex:20000}">
+		<u-popup :show="proSpecsState" @close="onClose" closeable round="10" z-index="20001"
+			:overlayStyle="{zIndex:20000}">
 			<view class="proSpecsWrapper">
 				<view class="top"></view>
 
@@ -19,7 +20,6 @@
 								</view>
 							</view>
 						</view>
-
 						<view class="numSelect">
 							<view class="title">购买数量</view>
 							<u-number-box v-model="numValue" @change="valChange"></u-number-box>
@@ -52,9 +52,9 @@
 		},
 		computed: {
 			...mapGetters(['proSpecsState', 'detailData']),
-			
+
 			// 是否展示规格区域
-			selectShow(){
+			selectShow() {
 				return this.detailData?.sku_select?.length ?? null
 			},
 
@@ -74,26 +74,26 @@
 			},
 		},
 		methods: {
-			...mapMutations(['setProSpecsState','setDetailState']),
-			
+			...mapMutations(['setProSpecsState', 'setDetailState', 'setCarsList']),
+
 			// 规格按钮的点击效果
 			clickSelect(itemIndex, childIndex) {
-			  let obj = {
-			    // 一级属性的 id
-			    id: this.detailData.sku_select[itemIndex]._id,
-			    // 二级属性的 name
-			    name: this.detailData.sku_select[itemIndex].children[childIndex].name
-			  }
-			  // 判断该一级属性下：是否已经点击选中了二级属性
-			  let index = this.userSelect.findIndex(item => {
-			    return item.id === obj.id
-			  })
-			  if (index < 0) {
-			    this.userSelect.push(obj)
-			  } else {
-			    // 若已选，则替换之前选择的二级属性（一个一级属性下，同时只允许选择一个二级属性，且至少选择一个二级属性）
-			    this.userSelect.splice(index, 1, obj)
-			  }
+				let obj = {
+					// 一级属性的 id
+					id: this.detailData.sku_select[itemIndex]._id,
+					// 二级属性的 name
+					name: this.detailData.sku_select[itemIndex].children[childIndex].name
+				}
+				// 判断该一级属性下：是否已经点击选中了二级属性
+				let index = this.userSelect.findIndex(item => {
+					return item.id === obj.id
+				})
+				if (index < 0) {
+					this.userSelect.push(obj)
+				} else {
+					// 若已选，则替换之前选择的二级属性（一个一级属性下，同时只允许选择一个二级属性，且至少选择一个二级属性）
+					this.userSelect.splice(index, 1, obj)
+				}
 			},
 
 			// 点击关闭弹窗
@@ -102,13 +102,22 @@
 				this.numValue = 1
 				this.userSelect = []
 			},
-			
+
 			// 确认购买
 			clickConfirm() {
+				let proItem = JSON.parse(JSON.stringify(this.detailData)) // 深拷贝
+				// 若该商品有可选规格，且选择了商品规格，则添加skuArr属性来记录所选规格，一并上传
+				if (this.skuArr.length) proItem.skuArr = this.skuArr
+				// 追加 add 标志属性，为 true 则表示使用的步进器来自规格弹窗，为 false 则表示来自步进器组件
+				proItem.add = true	
+				this.setCarsList({
+					item: proItem,
+					num: this.numValue
+				})
 				this.onClose()
 				this.setDetailState(false)
 			},
-			
+
 			// 修改步进器的值
 			valChange() {
 

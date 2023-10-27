@@ -6,7 +6,7 @@
 			</view>
 			<view class="text">
 				<view class="title">{{item.name}}</view>
-				<view class="sku" v-if="false"></view>
+				<view class="sku" v-if="item.skuArr">{{item.skuArr.join('/')}}</view>
 				<view class="price">
 					<view class="big">￥{{priceFormat(item.price)}}</view>
 					<view class="small" v-if="item.before_price">￥{{priceFormat(item.before_price)}}</view>

@@ -34,6 +34,7 @@
 			...mapMutations(['setCarsList', 'setProSpecsState']),
 
 			numChange(e) {
+				this.item.add = false
 				this.setCarsList({
 					item: this.item,
 					num: e.value
