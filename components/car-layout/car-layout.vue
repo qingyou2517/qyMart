@@ -4,11 +4,11 @@
 			<view class="goods" v-if="carshow">
 				<view class="head">
 					<view class="text">已选商品</view>
-					<view class="empty">清空</view>
+					<view class="empty" @click="clickEmpty">清空</view>
 				</view>
 				<scroll-view scroll-y="true" class="body">
 					<view class="sContent">
-						<view class="caritem" v-for="item in carsList" :key="item.goodsid+item.skuArr">
+						<view class="caritem" v-for="item in carsList" :key="carKey(item)">
 							<car-pro-item :item="item"></car-pro-item>
 						</view>
 					</view>
@@ -63,7 +63,19 @@
 
 		},
 		methods: {
+			...mapMutations(['setCarsList']),
+
 			priceFormat,
+
+			// 为 v-for 的遍历绑定一个唯一 key
+			carKey(item) {
+				return item.goodsid + JSON.stringify(item.skuArr)
+			},
+
+			// 清空购物车
+			clickEmpty() {
+				this.setCarsList()
+			},
 
 			goPay() {
 				uni.navigateTo({

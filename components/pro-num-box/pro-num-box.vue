@@ -1,10 +1,10 @@
 <template>
 	<view class="pronumbox">
-		<u-number-box v-model="dataItem.numValue" min="0" max="99" @change="numChange">
-			<view slot="minus" class="minus numbtn" :class="dataItem.numValue<=0?'none':''">
+		<u-number-box v-model="item.numValue" min="0" max="99" @change="numChange">
+			<view slot="minus" class="minus numbtn" :class="item.numValue<=0?'none':''">
 				<u-icon name="minus" size="12" color="#ccc"></u-icon>
 			</view>
-			<text slot="input" class="input" :class="dataItem.numValue<=0?'none':''">{{dataItem.numValue}}</text>
+			<text slot="input" class="input" :class="item.numValue<=0?'none':''">{{item.numValue}}</text>
 			<view slot="plus" class="plus numbtn">
 				<u-icon name="plus" color="#FFFFFF" size="12"></u-icon>
 			</view>
@@ -21,7 +21,7 @@
 		name: "pro-num-box",
 		data() {
 			return {
-				dataItem: this.item, // 暂时先使用 dataItem，后续连接了数据库再用.sync改
+				
 			};
 		},
 		props: {

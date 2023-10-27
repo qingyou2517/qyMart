@@ -3,7 +3,10 @@ const cars = {
 		carsList: []
 	},
 	mutations: {
-		setCarsList(state, params) {
+		setCarsList(state, params = null) {
+			if (!params) {
+				return state.carsList = []
+			}
 			let {
 				item,
 				num
