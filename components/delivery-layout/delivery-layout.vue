@@ -6,11 +6,11 @@
 			<view class="box" @click="goAddress">
 				<view class="left">收货地址</view>
 				<view class="center">
-					<view v-if="true">
+					<view v-if="false">
 						<view class="detail">{{deliveryInfo.address}}</view>
 						<view class="userinfo">{{deliveryInfo.username}} - {{deliveryInfo.mobile}}</view>
 					</view>
-					<view v-else>添加收货地址</view>
+					<view v-else>请添加收货地址</view>
 				</view>
 				<view class="right">
 					<u-icon name="arrow-right" size="18" color="#999"></u-icon>

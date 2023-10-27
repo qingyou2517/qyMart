@@ -19,6 +19,15 @@ const getters = {
 			return prev += next.price * next.numValue
 		}, 0)
 	},
+	preferentialPrice: state => {	// 总计优惠
+		let diff = 0
+		state.cars.carsList.forEach(item => {
+			if (item.before_price) {
+				diff += (item.before_price - item.price) * item.numValue
+			}
+		})
+		return diff
+	},
 	buyNum: state => {
 		return state.cars.carsList.reduce((prev, next) => {
 			return prev += next.numValue

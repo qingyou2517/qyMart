@@ -7,6 +7,14 @@
 			<u-form-item label="联系电话" prop="mobile">
 				<u--input v-model="addressForm.mobile" placeholder="请输入联系电话"></u--input>
 			</u-form-item>
+
+			<u-form-item label="选择地区" prop="mobile">
+				<uni-data-picker v-model="addressForm.area_code" placeholder="请选择地址" popup-title="请选择城市"
+					collection="opendb-city-china" field="code as value, name as text" orderby="value asc"
+					:step-searh="true" self-field="code" parent-field="parent_code" @change="pickerChange">
+				</uni-data-picker>
+			</u-form-item>
+
 			<u-form-item label="详细地址" prop="address">
 				<u--input v-model="addressForm.address" placeholder="请输入街道门牌号"></u--input>
 			</u-form-item>
@@ -33,7 +41,9 @@
 					username: '',
 					mobile: "",
 					address: "",
-					selected: false
+					selected: false,
+					area_code: "",
+					area_name: "",
 				},
 				addressRule: {
 					username: [{
@@ -66,13 +76,20 @@
 			};
 		},
 		methods: {
+			pickerChange(e) {
+				let res = e.detail.value
+				// console.log("pickerChange: ", res)
+				this.addressForm.area_code = res[res.length - 1].value
+				this.addressForm.area_name = res.map(item => item.text).join('')
+			},
+
 			onSubmit() {
 				this.$refs.uForm.validate().then(res => {
 					uni.$u.toast('校验通过')
 				}).catch(errors => {
 					uni.$u.toast('校验失败')
 				})
-			}
+			},
 		},
 	}
 </script>

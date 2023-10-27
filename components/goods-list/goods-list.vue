@@ -1,32 +1,37 @@
 <template>
 	<view class="goodsLayout">
 		<view class="wrapper">
-			<view class="title">共3件商品</view>
+			<view class="title">共{{goodsList.length}}件商品</view>
 
 			<view class="list">
-				<view class="row" v-for="item in 3">
+				<view class="row" v-for="item in goodsList">
 					<view class="left">
-						<image src="../../static/images/pinkpic.jpg" mode="aspectFill" class="img"></image>
-						<view class="name">卫龙小面筋</view>
+						<image :src="item.thumb[0].url" mode="aspectFill" class="img"></image>
+						<view class="name">{{item.name}}</view>
 					</view>
-					<view class="center">×3</view>
+					<view class="center">×{{item.numValue}}</view>
 					<view class="right">
-						<view class="big">￥15.5</view>
-						<view class="small">￥22.3</view>
+						<view class="big">￥{{priceFormat(item.price)}}</view>
+						<view class="small" v-if="item.before_price">￥{{priceFormat(item.before_price)}}</view>
 					</view>
 				</view>
 			</view>
 
 			<view class="total">
 				<text>
-					已优惠￥10.2，
-				</text> 合计 <text class="big">￥45.8</text>
+					已优惠￥{{priceFormat(prePrice)}}，
+				</text> 合计 <text class="big">￥{{priceFormat(totalPrice)}}</text>
 			</view>
 		</view>
 	</view>
 </template>
 
 <script>
+	import {
+		priceFormat,
+		discount
+	} from '@/utils/tools.js'
+
 	export default {
 		name: "goods-list",
 		data() {
@@ -36,7 +41,25 @@
 		},
 		options: {
 			styleIsolation: 'shared',
-		}
+		},
+		props: {
+			goodsList: {
+				type: Array,
+				default: {}
+			},
+			totalPrice: {
+				type: Number,
+				default: 0
+			},
+			prePrice: { // 优惠数额
+				type: Number,
+				default: 0
+			},
+		},
+		methods: {
+			priceFormat,
+			discount,
+		},
 	}
 </script>
 

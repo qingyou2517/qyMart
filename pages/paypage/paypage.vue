@@ -3,7 +3,7 @@
 		<delivery-layout></delivery-layout>
 
 		<view class="goodsList">
-			<goods-list></goods-list>
+			<goods-list :goodsList="carsList" :totalPrice="totalPrice" :prePrice="preferentialPrice"></goods-list>
 		</view>
 
 		<!-- #ifndef MP-WEIXIN -->
@@ -24,6 +24,10 @@
 </template>
 
 <script>
+	import {
+		mapGetters
+	} from 'vuex'
+
 	export default {
 		data() {
 			return {
@@ -47,6 +51,9 @@
 					icon: "weixin-fill",
 				}],
 			};
+		},
+		computed: {
+			...mapGetters(['carsList', 'totalPrice', 'preferentialPrice']),
 		},
 		methods: {
 			//选择支付类型
