@@ -52,6 +52,7 @@
 		mapGetters,
 		mapMutations,
 	} from 'vuex'
+	import formItem from '../../uni_modules/uview-ui/libs/config/props/formItem'
 
 	const goodsCloudObj = uniCloud.importObject('qy-mall-goods', {
 		customUI: true
@@ -77,7 +78,15 @@
 			})
 		},
 		computed: {
-			...mapGetters(['buyNum'])
+			...mapGetters(['buyNum', 'carsList'])
+		},
+		watch: {
+			carsList: {
+				deep: true,
+				handler(newVal, oldVal) {
+					this.setNumValue()
+				}
+			}
 		},
 		methods: {
 			...mapMutations(['setFoldState']),
@@ -85,12 +94,39 @@
 			// 获取所有商品
 			async getGoodsData() {
 				let res = await goodsCloudObj.getList()
-				res.data.forEach(item => {
+				this.dataList = res.data
+
+				// dataList 是 Vue2 的 data 对象，它动态新增的属性不会有响应式代理，所以需要$set
+				this.dataList.forEach(item => {
 					item.proGroup.forEach((child, idx) => {
-						child.numValue = 0
+						// 使用 $set 为 vue2 的 data 对象上新增的 numValue 属性创建响应式代理
+						this.$set(child, 'numValue', 0)
 					})
 				})
-				this.dataList = res.data
+			},
+
+			// 购物车内改变的商品数量，同步到产品栏的步进器组件那
+			setNumValue() {
+				this.carsList.forEach((item1, index1) => {
+					this.dataList.forEach((item2, index2) => {
+						// item2.proGroup 即一类产品
+						let index = item2.proGroup.findIndex(child => {
+							// child 其实就是一件商品的信息
+							return child._id === item1.goodsid
+						})
+						if (index >= 0) {
+							this.dataList[index2].proGroup[index].numValue = item1.numValue
+						}
+					})
+				})
+				// 当 carsList 清空的时候，干脆把 dataList 所有 numValue 全置为 0
+				if (this.carsList.length <= 0) {
+					this.dataList.forEach(item => {
+						item.proGroup.forEach((child, idx) => {
+							child.numValue = 0
+						})
+					})
+				}
 			},
 
 			// 点击左侧导航菜单
