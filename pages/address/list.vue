@@ -8,7 +8,8 @@
 		</view>
 
 		<view class="list">
-			<view class="item" v-for="item in addressList" :key="item._id" @longpress="goUpdate(item._id)">
+			<view class="item" v-for="item in addressList" :key="item._id" @longpress="goUpdate(item._id)"
+				@click="selectAddress(item)">
 				<view class="head">
 					<view class="user">{{item.username}} - {{item.mobile}}</view>
 					<view class="select">
@@ -26,9 +27,7 @@
 </template>
 
 <script>
-	const listCloudObj = uniCloud.importObject('qy-mall-address', {
-		customUI: true
-	})
+	const listCloudObj = uniCloud.importObject('qy-mall-address')
 
 	export default {
 		data() {
@@ -57,6 +56,12 @@
 					url: "/pages/address/edit?id=" + _id
 				})
 			},
+
+			// 点击选择地址
+			selectAddress(item) {
+				uni.$emit("selectAddressEvent", item)
+				uni.navigateBack()
+			}
 		}
 	}
 </script>

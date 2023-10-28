@@ -6,8 +6,8 @@
 			<view class="box" @click="goAddress">
 				<view class="left">收货地址</view>
 				<view class="center">
-					<view v-if="false">
-						<view class="detail">{{deliveryInfo.address}}</view>
+					<view v-if="deliveryInfo._id">
+						<view class="detail">{{deliveryInfo.area_name}}{{deliveryInfo.address}}</view>
 						<view class="userinfo">{{deliveryInfo.username}} - {{deliveryInfo.mobile}}</view>
 					</view>
 					<view v-else>请添加收货地址</view>
@@ -17,7 +17,7 @@
 				</view>
 			</view>
 		</view>
-		
+
 	</view>
 </template>
 
@@ -26,17 +26,23 @@
 		name: "delivery-layout",
 		data() {
 			return {
-				deliveryInfo: {
-					address: "江西省吉安市吉安县永阳镇xx村xx号",
-					username: "小帅",
-					mobile: 13105556888,
-				}
+
 			};
 		},
-		methods:{
-			goAddress(){
+		props: {
+			deliveryInfo: {
+				type: Object,
+				default: {
+					address: "",
+					username: "",
+					mobile: null
+				}
+			}
+		},
+		methods: {
+			goAddress() {
 				uni.navigateTo({
-					url:"/pages/address/list"
+					url: "/pages/address/list"
 				})
 			}
 		}

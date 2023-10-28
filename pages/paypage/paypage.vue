@@ -1,6 +1,6 @@
 <template>
 	<view class="paypage">
-		<delivery-layout></delivery-layout>
+		<delivery-layout :deliveryInfo="deliveryInfo"></delivery-layout>
 
 		<view class="goodsList">
 			<goods-list :goodsList="carsList" :totalPrice="totalPrice" :prePrice="preferentialPrice"></goods-list>
@@ -28,9 +28,13 @@
 		mapGetters
 	} from 'vuex'
 
+	const addressCloudObj = uniCloud.importObject('qy-mall-address', {
+		customUI: true
+	})
 	export default {
 		data() {
 			return {
+				deliveryInfo: {},
 				// #ifndef MP-WEIXIN 
 				payDefValue: "alipay",
 				// #endif
@@ -52,14 +56,31 @@
 				}],
 			};
 		},
+		onLoad() {
+			this.getDefaultAddress()
+			uni.$on("selectAddressEvent", (e) => {
+				this.deliveryInfo = e
+			})
+		},
+		onUnload() {
+			uni.$off("selectAddressEvent")
+		},
 		computed: {
 			...mapGetters(['carsList', 'totalPrice', 'preferentialPrice']),
 		},
 		methods: {
+			// 读取默认收货地址
+			async getDefaultAddress() {
+				let res = await addressCloudObj.getDefault()
+				if (res.data.length) {
+					this.deliveryInfo = res.data[0]
+				}
+			},
+
 			//选择支付类型
 			clickPayBtn(value) {
 				this.payDefValue = value
-			}
+			},
 		}
 	}
 </script>

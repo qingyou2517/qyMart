@@ -40,13 +40,13 @@ module.exports = {
 	// 修改地址信息
 	async updateOne(data) {
 		if (!this.userInfo.uid) return this.userInfo;
-		
+
 		// data 包含_id、user_id、time等
 		let newData = {
 			...data
 		}
 		delete newData._id
-		
+
 		await db.collection('qy-mall-address').where({
 			user_id: this.userInfo.uid // 必须匹配 uid，不能改错用户
 		}).update({
@@ -55,10 +55,20 @@ module.exports = {
 		return await db.collection('qy-mall-address').doc(data._id).update(newData)
 	},
 
+	// 获取默认收货地址
+	async getDefault() {
+		if (!this.userInfo.uid) return this.userInfo;
+
+		return await db.collection('qy-mall-address').where({
+			user_id: this.userInfo.uid,
+			selected: true
+		}).get()
+	},
+
 	// 修改默认地址
 	async updateDefault(_id) {
 		if (!this.userInfo.uid) return this.userInfo;
-		
+
 		await db.collection('qy-mall-address').where({
 			user_id: this.userInfo.uid // 必须匹配 uid，不能改错用户
 		}).update({
