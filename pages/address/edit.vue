@@ -8,7 +8,7 @@
 				<u--input v-model="addressForm.mobile" placeholder="请输入联系电话"></u--input>
 			</u-form-item>
 
-			<u-form-item label="选择地区" prop="mobile">
+			<u-form-item label="选择地区">
 				<uni-data-picker v-model="addressForm.area_code" placeholder="请选择地址" popup-title="请选择城市"
 					collection="opendb-city-china" field="code as value, name as text" orderby="value asc"
 					:step-searh="true" self-field="code" parent-field="parent_code" @change="pickerChange">
@@ -34,7 +34,10 @@
 </template>
 
 <script>
-	const addressCloudObj = uniCloud.importObject('qy-mall-address')
+	const addressCloudObj = uniCloud.importObject('qy-mall-address', {
+		customUI: true
+	})
+	let addressId;
 	export default {
 		data() {
 			return {
@@ -76,23 +79,46 @@
 				},
 			};
 		},
+		onLoad(e) {
+			addressId = e?.id ?? null
+			if (addressId) this.getAddressOne()
+		},
 		methods: {
+			// 获取一条地址信息
+			async getAddressOne() {
+				// 若 addressId 为 undefined，则 res 为 null
+				let res = await addressCloudObj.getOne(addressId)
+				this.addressForm = res.data[0] // 这时addressForm已经包含了user_id等
+			},
+
+			// 级联选择器获取中国城市
 			pickerChange(e) {
 				let res = e.detail.value
-				// console.log("pickerChange: ", res)
 				this.addressForm.area_code = res[res.length - 1].value
 				this.addressForm.area_name = res.map(item => item.text).join('')
 			},
 
-			async onSubmit() {
-				this.$refs.uForm.validate().then(res => {
-					// uni.$u.toast('校验通过')
+			onSubmit() {
+				this.$refs.uForm.validate().then(async res => {
+					if (addressId) {
+						await addressCloudObj.updateOne(this.addressForm)
+						uni.showToast({
+							title: "修改成功",
+							mask: true,
+						})
+					} else {
+						await addressCloudObj.add(this.addressForm)
+						uni.showToast({
+							title: "添加成功",
+							mask: true,
+						})
+					}
+					setTimeout(() => {
+						uni.navigateBack()
+					}, 1000)
 				}).catch(errors => {
 					uni.$u.toast('校验失败')
 				})
-				
-				let res = await addressCloudObj.add(this.addressForm)
-				console.log("token: ",res)
 			},
 		},
 	}

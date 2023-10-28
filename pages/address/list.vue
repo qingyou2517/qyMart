@@ -8,16 +8,17 @@
 		</view>
 
 		<view class="list">
-			<view class="item" v-for="item in 3">
+			<view class="item" v-for="item in addressList" :key="item._id" @longpress="goUpdate(item._id)">
 				<view class="head">
-					<view class="user">文天祥,18066668888</view>
+					<view class="user">{{item.username}} - {{item.mobile}}</view>
 					<view class="select">
-						<u-button v-if="false" color="#EC544F" plain size="mini" text="默认地址"></u-button>
-						<u-button color="#666" v-else plain size="mini" text="设为默认"></u-button>
+						<u-button v-if="item.selected" color="#EC544F" plain size="mini" text="默认地址"></u-button>
+						<u-button color="#666" v-else plain size="mini" text="设为默认"
+							@click="clickDefault(item._id)"></u-button>
 					</view>
 				</view>
 				<view class="more">
-					江西省吉安市吉安县xxx镇
+					{{item.area_name}}{{item.address}}
 				</view>
 			</view>
 		</view>
@@ -25,11 +26,37 @@
 </template>
 
 <script>
+	const listCloudObj = uniCloud.importObject('qy-mall-address', {
+		customUI: true
+	})
+
 	export default {
 		data() {
 			return {
-
+				addressList: []
 			};
+		},
+		onShow() { // onLoad 只执行一次，onShow 从任何页面进入都会刷新加载一次，会有点浪费性能
+			this.getAddressList()
+		},
+		methods: {
+			async getAddressList() {
+				let res = await listCloudObj.getList()
+				this.addressList = res.data
+			},
+
+			// 设为默认地址
+			async clickDefault(_id) {
+				await listCloudObj.updateDefault(_id)
+				this.getAddressList()
+			},
+
+			// 长按跳转编辑地址信息
+			goUpdate(_id) {
+				uni.navigateTo({
+					url: "/pages/address/edit?id=" + _id
+				})
+			},
 		}
 	}
 </script>
