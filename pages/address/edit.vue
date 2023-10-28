@@ -34,6 +34,7 @@
 </template>
 
 <script>
+	const addressCloudObj = uniCloud.importObject('qy-mall-address')
 	export default {
 		data() {
 			return {
@@ -83,12 +84,15 @@
 				this.addressForm.area_name = res.map(item => item.text).join('')
 			},
 
-			onSubmit() {
+			async onSubmit() {
 				this.$refs.uForm.validate().then(res => {
 					uni.$u.toast('校验通过')
 				}).catch(errors => {
 					uni.$u.toast('校验失败')
 				})
+				
+				let res = await addressCloudObj.add(this.addressForm)
+				console.log("token: ",res)
 			},
 		},
 	}
