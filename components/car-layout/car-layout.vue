@@ -25,7 +25,7 @@
 				</view>
 				<view class="right">
 					<view class="btn" v-if="!type" @click="goPay">选好了</view>
-					<view class="btn" v-else @click="confirmPay">确认支付</view>
+					<view class="btn" v-else @click="confirmPay" :class="ptnState?'':'disable'">确认支付</view>
 				</view>
 			</view>
 
@@ -56,6 +56,10 @@
 			type: {
 				type: String,
 				default: ''
+			},
+			ptnState: {
+				type: Boolean,
+				default: true
 			}
 		},
 		computed: {
@@ -86,7 +90,8 @@
 				this.carshow = !this.carshow
 			},
 			confirmPay(e) {
-				console.log('确认支付')
+				if (!this.ptnState) return;
+				console.log("确认支付")
 			}
 		}
 	}

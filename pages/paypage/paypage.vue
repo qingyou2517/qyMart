@@ -18,7 +18,7 @@
 		<!-- #endif -->
 
 		<view class="payTabbar">
-			<car-layout type="pay"></car-layout>
+			<car-layout type="pay" :ptnState="ptnState"></car-layout>
 		</view>
 	</view>
 </template>
@@ -67,6 +67,13 @@
 		},
 		computed: {
 			...mapGetters(['carsList', 'totalPrice', 'preferentialPrice']),
+
+			ptnState() {
+				let bool = Object.keys(this.deliveryInfo).every(key => {
+					return this.deliveryInfo[key] !== ""
+				})
+				return this.carsList.length > 0 && this.totalPrice > 0 && bool
+			}
 		},
 		methods: {
 			// 读取默认收货地址
