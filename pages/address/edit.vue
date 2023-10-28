@@ -86,7 +86,7 @@
 
 			async onSubmit() {
 				this.$refs.uForm.validate().then(res => {
-					uni.$u.toast('校验通过')
+					// uni.$u.toast('校验通过')
 				}).catch(errors => {
 					uni.$u.toast('校验失败')
 				})
