@@ -91,6 +91,7 @@
 			},
 			confirmPay(e) {
 				if (!this.ptnState) return;
+				this.$emit("confirmPay")
 				console.log("确认支付")
 			}
 		}

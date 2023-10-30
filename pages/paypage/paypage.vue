@@ -18,8 +18,11 @@
 		<!-- #endif -->
 
 		<view class="payTabbar">
-			<car-layout type="pay" :ptnState="ptnState"></car-layout>
+			<car-layout type="pay" :ptnState="ptnState" @confirmPay="onConfirmPay"></car-layout>
 		</view>
+
+		<uni-pay ref="uniPay" return-url="/pages/order/order" @success="paySuccess" @cancel="payCancel"
+			@create="payCreate"></uni-pay>
 	</view>
 </template>
 
@@ -29,6 +32,9 @@
 	} from 'vuex'
 
 	const addressCloudObj = uniCloud.importObject('qy-mall-address', {
+		customUI: true
+	})
+	const orderCloudObj = uniCloud.importObject('qy-mall-order', {
 		customUI: true
 	})
 	export default {
@@ -84,9 +90,51 @@
 				}
 			},
 
+			// 点击了支付按钮
+			async onConfirmPay() {
+				let obj = {		// 前端需要上传的支付信息
+					deliveryInfo: this.deliveryInfo,
+					carsList: this.carsList,
+					createTime: Date.now(),
+					payType: this.payDefValue,
+					status: 0,					// 支付状态，默认0表示未支付
+					total_fee: this.totalPrice,
+					done: false					// 默认未处理
+				}
+				// 拿到后台生成的订单号，同时上传支付信息
+				let order_no = await orderCloudObj.createOrder(obj)
+				console.log('order_no: ',order_no)
+				let out_trade_no = order_no + '_' + String(Math.random()).substring(3, 9)
+				
+				// 前端调用支付功能
+				this.$refs.uniPay.createOrder({
+					provider: this.payDefValue, // 支付方式
+					total_fee: this.totalPrice, // 支付金额，单位分 100 = 1元
+					type: "goods", // 支付回调类型
+					order_no, // 业务系统订单号
+					out_trade_no, // 插件支付单号
+					description: "商品购买支付", // 支付描述
+				});
+			},
+
 			//选择支付类型
 			clickPayBtn(value) {
 				this.payDefValue = value
+			},
+
+			// 支付成功
+			paySuccess(e) {
+				console.log("支付成功: ", e)
+			},
+
+			// 取消支付
+			payCancel(e) {
+				console.log("取消支付: ", e)
+			},
+
+			// 创建支付订单(此时用户还未支付)
+			payCreate(e) {
+				console.log("创建支付订单: ", e)
 			},
 		}
 	}

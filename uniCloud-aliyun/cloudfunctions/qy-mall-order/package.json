@@ -1,0 +1,9 @@
+{
+  "name": "qy-mall-order",
+  "dependencies": {
+    "self-utils": "file:../common/self-utils"
+  },
+  "extensions": {
+    "uni-cloud-jql": {}
+  }
+}
